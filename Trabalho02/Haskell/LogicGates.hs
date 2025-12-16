@@ -5,18 +5,24 @@ module LogicGates
   , xorGate
   ) where
 
--- Porta NOT: 
+-- função auxiliar que valida se é bit
+checkBit :: Int -> Int
+checkBit x
+  | x == 0 || x == 1 = x
+  | otherwise        = error ("esperado 0 ou 1, mas recebeu: " ++ show x)
+
+-- Porta NOT 
 notGate :: [Int] -> [Int]
-notGate = map (1 -)
+notGate = map (\x -> 1 - checkBit x)
 
--- Porta AND: 
+-- Porta AND 
 andGate :: [Int] -> [Int] -> [Int]
-andGate = zipWith (*)
+andGate = zipWith (\x y -> checkBit x * checkBit y)
 
--- Porta OR: 
+-- Porta OR 
 orGate :: [Int] -> [Int] -> [Int]
-orGate = zipWith max
+orGate = zipWith (\x y -> max (checkBit x) (checkBit y))
 
--- Porta XOR: 
+-- Porta XOR 
 xorGate :: [Int] -> [Int] -> [Int]
-xorGate = zipWith (\x y -> (x + y) `mod` 2)
+xorGate = zipWith (\x y -> (checkBit x + checkBit y) `mod` 2)
